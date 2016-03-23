@@ -1,5 +1,6 @@
 var GoogleMaps = require('google-maps')
-	, Noise = require('noisejs').Noise;
+	, Noise = require('noisejs').Noise
+	, dat = require('exdat');
 
 // config
 GoogleMaps.KEY = 'AIzaSyCuKjnJWCoUMRLbVFNEkJoFVD0I73u_xJo';
@@ -7,9 +8,18 @@ GoogleMaps.KEY = 'AIzaSyCuKjnJWCoUMRLbVFNEkJoFVD0I73u_xJo';
 var _noise = new Noise(Math.random());
 
 var _container = document.createElement('div')
-	, _map;
+	, _map
+	, _gui
+	, _interval;
 
 _container.id = 'map-container';
+
+
+var _params = {
+	movementRadius: 100
+	, movementDelay: 100
+}
+
 
 // Normalizes the coords that tiles repeat across the x axis (horizontally)
 // like the standard Google map tiles.
@@ -88,7 +98,7 @@ GoogleMaps.load(function(google) {
   }
 
   function randomRadius(x, y) {
-  	return (1 - (Math.random()*2)) * movementRadius;
+  	return (1 - (Math.random()*2)) * _params.movementRadius;
   	// return _noise.simplex2(x, y, (new Date()).getTime()) * movementRadius;
   }
 
@@ -97,5 +107,18 @@ GoogleMaps.load(function(google) {
   	return (_noise.simplex2(x, (new Date()).getTime()) * latLngRadius) + x;
   }
 
-  window.setInterval(randomPan, 1000);
+
+	_gui = new dat.GUI();
+	_gui.add(_params, 'movementRadius', 0, 1000);
+	_gui.add(_params, 'movementDelay', 0, 5000).onChange(function(v) {
+		window.clearInterval(_interval);
+		start();
+	});
+
+	function start() {
+	  _interval = window.setInterval(randomPan, _params.movementDelay);	
+	}
+
+	start();
+
 });

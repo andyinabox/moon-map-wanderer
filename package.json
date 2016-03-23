@@ -16,6 +16,7 @@
     "url": "http://andydayton.com/"
   },
   "dependencies": {
+    "exdat": "^0.6.2",
     "google-maps": "^3.2.1",
     "noisejs": "^2.1.0"
   },
