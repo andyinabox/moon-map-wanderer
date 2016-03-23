@@ -71,7 +71,7 @@ GoogleMaps.load(function(google) {
   _map.mapTypes.set('moon', moonMapType);
   _map.setMapTypeId('moon');
 
-  var movementRadius = 100;
+  var movementRadius = 500;
   var latLngRadius = .1;
 
   function randomPan() {
@@ -97,5 +97,5 @@ GoogleMaps.load(function(google) {
   	return (_noise.simplex2(x, (new Date()).getTime()) * latLngRadius) + x;
   }
 
-  window.setInterval(randomPan, 100);
+  window.setInterval(randomPan, 1000);
 });
