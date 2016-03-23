@@ -1,7 +1,10 @@
-var GoogleMaps = require('google-maps');
+var GoogleMaps = require('google-maps')
+	, Noise = require('noisejs').Noise;
 
 // config
 GoogleMaps.KEY = 'AIzaSyCuKjnJWCoUMRLbVFNEkJoFVD0I73u_xJo';
+
+var _noise = new Noise(Math.random());
 
 var _container = document.createElement('div')
 	, _map;
@@ -68,14 +71,30 @@ GoogleMaps.load(function(google) {
   _map.mapTypes.set('moon', moonMapType);
   _map.setMapTypeId('moon');
 
-  var movementRadius = 5;
+  var movementRadius = 100;
+  var latLngRadius = .1;
 
   function randomPan() {
-  	_map.panBy(randomRadius(), randomRadius());
+  	var center = _map.getCenter();
+  	_map.panBy(randomRadius(center.lat(), center.lng()), randomRadius(center.lng(), center.lat()));
   }
 
-  function randomRadius() {
+  function randomCenter() {
+  	var center = _map.getCenter();
+  	_map.setCenter({
+  		lat: randomLatLng(center.lat()),
+  		lng: randomLatLng(center.lng())
+  	});
+  }
+
+  function randomRadius(x, y) {
   	return (1 - (Math.random()*2)) * movementRadius;
+  	// return _noise.simplex2(x, y, (new Date()).getTime()) * movementRadius;
+  }
+
+  function randomLatLng(x) {
+  	// return (1 - (Math.random()*2)) * movementRadius;
+  	return (_noise.simplex2(x, (new Date()).getTime()) * latLngRadius) + x;
   }
 
   window.setInterval(randomPan, 100);

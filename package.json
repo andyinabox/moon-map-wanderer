@@ -16,7 +16,8 @@
     "url": "http://andydayton.com/"
   },
   "dependencies": {
-    "google-maps": "^3.2.1"
+    "google-maps": "^3.2.1",
+    "noisejs": "^2.1.0"
   },
   "devDependencies": {
     "budo": "~7.1.0"
