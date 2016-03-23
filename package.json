@@ -20,7 +20,8 @@
     "noisejs": "^2.1.0"
   },
   "devDependencies": {
-    "budo": "~7.1.0"
+    "budo": "~7.1.0",
+    "gh-pages": "^0.11.0",
   },
   "repository": {
     "type": "git",
