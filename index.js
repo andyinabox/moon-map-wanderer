@@ -57,14 +57,26 @@ GoogleMaps.load(function(google) {
 
 	// create map
 	_map = new google.maps.Map(_container, {
-    center: {lat: 0, lng: 0},
-    zoom: 9,
-    streetViewControl: false,
-    mapTypeControlOptions: {
-      mapTypeIds: ['moon']
+    center: {lat: 0, lng: 0}
+    , zoom: 9
+    , disableDefaultUI: true
+    , mapTypeControlOptions: {
+    	mapTypeIds: ['moon']
     }
 	});
 
   _map.mapTypes.set('moon', moonMapType);
-  _map.setMapTypeId('moon')
+  _map.setMapTypeId('moon');
+
+  var movementRadius = 5;
+
+  function randomPan() {
+  	_map.panBy(randomRadius(), randomRadius());
+  }
+
+  function randomRadius() {
+  	return (1 - (Math.random()*2)) * movementRadius;
+  }
+
+  window.setInterval(randomPan, 100);
 });
