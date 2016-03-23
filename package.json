@@ -1,0 +1,31 @@
+{
+  "name": "moon-map-wanderer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "budo index.js --live --open --css styles.css",
+    "build": "budo-demo index.js -c styles.css",
+    "deploy": "npm run build; gh-pages -d dist; npm run clean",
+    "clean": "rm -r dist"
+  },
+  "author": {
+    "name": "Andy Dayton",
+    "email": "amdayton@gmail.com",
+    "url": "http://andydayton.com/"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "budo": "~7.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/andyinabox/moon-map-wanderer.git"
+  },
+  "homepage": "https://github.com/andyinabox/moon-map-wanderer",
+  "bugs": {
+    "url": "https://github.com/andyinabox/moon-map-wanderer/issues"
+  }
+}
