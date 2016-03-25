@@ -2,7 +2,8 @@ var GoogleMaps = require('google-maps')
 	, Noise = require('noisejs').Noise
 	, dat = require('exdat')
   , glMatrix = require('gl-matrix')
-  , raf = require('raf');
+  , raf = require('raf')
+  , KeyListner = require('key-listener');
 
 var vec2 = glMatrix.vec2
   , mat2 = mat2 = glMatrix.mat2
@@ -19,6 +20,7 @@ var _container = document.createElement('div')
 
 _container.id = 'map-container';
 
+var _keyHandler = new KeyListner();
 
 var _params = {
 	maxMovementDist : 0.01
@@ -137,7 +139,7 @@ GoogleMaps.load(function(google) {
     rotateVec2(_movementVec, _movementVec, deg2Rad(rotationDeg));
     vec2.scale(_scaledMovement, _movementVec, _params.maxMovementDist);
     vec2.add(_position, _position, _scaledMovement);
-    console.log('movement vec', vec2.len(_position), vec2.len(_scaledMovement), vec2.len(_movementVec));
+    // console.log('movement vec', vec2.len(_position), vec2.len(_scaledMovement), vec2.len(_movementVec));
     _map.setCenter(vec2ToLatLng(_position));
   }
 
@@ -188,6 +190,11 @@ GoogleMaps.load(function(google) {
 			start();
 		}
 	});
+
+  _keyHandler.addListener(document, 'g', function() {
+    console.log('g key!', _gui.domElement);
+    _gui.domElement.classList.toggle('hidden');
+  });
 
 	function start() {
     raf(function tick() {

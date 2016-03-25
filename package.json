@@ -19,6 +19,7 @@
     "exdat": "^0.6.2",
     "gl-matrix": "^2.3.2",
     "google-maps": "^3.2.1",
+    "key-listener": "^1.0.1",
     "noisejs": "^2.1.0",
     "raf": "^3.2.0"
   },
