@@ -29,9 +29,10 @@ var _params = {
 
 var _position = vec2.create();
 var _movementVec = vec2.create();
+var _scaledMovement = vec2.create();
 
 // set initial movement vector
-vec2.set(_movementVec, (Math.random()*_params.maxMovementDist ), (Math.random()*_params.maxMovementDist ));
+vec2.set(_movementVec, 1, 0);
 
 // Normalizes the coords that tiles repeat across the x axis (horizontally)
 // like the standard Google map tiles.
@@ -131,9 +132,9 @@ GoogleMaps.load(function(google) {
   function vectorMovement() {
     // vec2.add(_position, _position, createRotatedVector(_position, deg2Rad(5)));
     var rotationDeg = (Math.random()*(_params.maxMovementDeg*2)) - _params.maxMovementDeg;
-    // console.log('rotation', rotationDeg, _params.maxMovementDeg);
     rotateVec2(_movementVec, _movementVec, deg2Rad(rotationDeg));
-    vec2.add(_position, _position, _movementVec);
+    vec2.scale(_scaledMovement, _movementVec, _params.maxMovementDist);
+    vec2.add(_position, _position, _scaledMovement);
     // console.log('new position', _position, vec2.len(_position));
     _map.setCenter(vec2ToLatLng(_position));
   }
