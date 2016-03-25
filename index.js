@@ -1,6 +1,9 @@
 var GoogleMaps = require('google-maps')
 	, Noise = require('noisejs').Noise
-	, dat = require('exdat');
+	, dat = require('exdat')
+  , glMatrix = require('gl-matrix')
+  , vec2 = glMatrix.vec2
+  , mat2 = mat2 = glMatrix.mat2
 
 // config
 GoogleMaps.KEY = 'AIzaSyCuKjnJWCoUMRLbVFNEkJoFVD0I73u_xJo';
@@ -16,12 +19,19 @@ _container.id = 'map-container';
 
 
 var _params = {
-	movementRadius: 100
+	maxMovementDist : 0.01
+  , maxMovementDeg: 10
 	, movementDelay: 100
 	, flipped: false
 	, wandering: true
 }
 
+
+var _position = vec2.create();
+var _movementVec = vec2.create();
+
+// set initial movement vector
+vec2.set(_movementVec, (Math.random()*_params.maxMovementDist ), (Math.random()*_params.maxMovementDist ));
 
 // Normalizes the coords that tiles repeat across the x axis (horizontally)
 // like the standard Google map tiles.
@@ -83,11 +93,12 @@ GoogleMaps.load(function(google) {
   _map.mapTypes.set('moon', moonMapType);
   _map.setMapTypeId('moon');
 
-  var movementRadius = 500;
+  // var maxMovementDist  = 500;
   var latLngRadius = .1;
 
   function randomPan() {
   	var center = _map.getCenter();
+    console.log('current position', center.lat(), center.lng());
   	_map.panBy(randomRadius(center.lat(), center.lng()), randomRadius(center.lng(), center.lat()));
   }
 
@@ -100,18 +111,68 @@ GoogleMaps.load(function(google) {
   }
 
   function randomRadius(x, y) {
-  	return (1 - (Math.random()*2)) * _params.movementRadius;
-  	// return _noise.simplex2(x, y, (new Date()).getTime()) * movementRadius;
+  	return (1 - (Math.random()*2)) * _params.maxMovementDist ;
+  	// return _noise.simplex2(x, y, (new Date()).getTime()) * maxMovementDist ;
   }
 
   function randomLatLng(x) {
-  	// return (1 - (Math.random()*2)) * movementRadius;
+  	// return (1 - (Math.random()*2)) * maxMovementDist ;
   	return (_noise.simplex2(x, (new Date()).getTime()) * latLngRadius) + x;
   }
 
+  // ok, here's what i think needs to happen. there needs to be a single vector
+  // for movement. every tick that movement vector is rotated slightly.
+  // then the map center position (LatLng) is transformed into a vector, and added to
+  // the movement vector. next the pos vector is transformed back into LatLng
+  // and then set as the new center
+  
+  // also: use requestAnimationFrame for movement rather than setTimeout
+
+  function vectorMovement() {
+    // vec2.add(_position, _position, createRotatedVector(_position, deg2Rad(5)));
+    var rotationDeg = (Math.random()*(_params.maxMovementDeg*2)) - _params.maxMovementDeg;
+    // console.log('rotation', rotationDeg, _params.maxMovementDeg);
+    rotateVec2(_movementVec, _movementVec, deg2Rad(rotationDeg));
+    vec2.add(_position, _position, _movementVec);
+    // console.log('new position', _position, vec2.len(_position));
+    _map.setCenter(vec2ToLatLng(_position));
+  }
+
+  function rotateVec2(out, v, rad) {
+    // console.log('createRotatedVector', v, rad);
+    var m = mat2.create()
+      , v2 = vec2.create();
+
+    // radians
+    mat2.rotate(m, m, rad);
+
+    vec2.transformMat2(out, v, m);
+
+    return out;
+  }
+
+  function deg2Rad(deg) {
+    return deg * Math.PI / 180;
+  }
+
+  function getRandomVector(min, max) {
+    var v = vec2.create();
+    vec2.set(
+      v
+      , min + (Math.random()*(max-min))
+      , min + (Math.random()*(max-min))
+    );
+
+    return v;
+  }
+
+  function vec2ToLatLng(v) {
+    return new google.maps.LatLng(v[0], v[1]);
+  }
 
 	_gui = new dat.GUI();
-	_gui.add(_params, 'movementRadius', 0, 1000);
+	_gui.add(_params, 'maxMovementDist', 0, 1);
+  _gui.add(_params, 'maxMovementDeg', 0, 180);
 	_gui.add(_params, 'movementDelay', 0, 5000).onChange(function(v) {
 		stop();
 		start();
@@ -128,7 +189,7 @@ GoogleMaps.load(function(google) {
 	});
 
 	function start() {
-	  _interval = window.setInterval(randomPan, _params.movementDelay);	
+	  _interval = window.setInterval(vectorMovement, _params.movementDelay);	
 	}
 
 	function stop() {
