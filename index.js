@@ -18,6 +18,8 @@ _container.id = 'map-container';
 var _params = {
 	movementRadius: 100
 	, movementDelay: 100
+	, flipped: false
+	, wandering: true
 }
 
 
@@ -111,14 +113,32 @@ GoogleMaps.load(function(google) {
 	_gui = new dat.GUI();
 	_gui.add(_params, 'movementRadius', 0, 1000);
 	_gui.add(_params, 'movementDelay', 0, 5000).onChange(function(v) {
-		window.clearInterval(_interval);
+		stop();
 		start();
+	});
+	_gui.add(_params, 'flipped').onChange(function(v) {
+		_container.classList.toggle('flipped');
+	});
+	_gui.add(_params, 'wandering').onChange(function(v) {
+		if(v) {
+			start();
+		} else {
+			stop();
+		}
 	});
 
 	function start() {
 	  _interval = window.setInterval(randomPan, _params.movementDelay);	
 	}
 
-	start();
+	function stop() {
+		if(_interval) {
+			window.clearInterval(_interval);
+		}
+ 	}
+
+ 	if(_params.wandering) {
+ 		start();
+ 	}
 
 });
