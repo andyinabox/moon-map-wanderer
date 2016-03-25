@@ -38,6 +38,13 @@ body {
   left: auto !important;
 }
 
+// #map-container.flipped .gm-style > div:nth-child(2) > a > div,
+// #map-container.flipped .gm-style > div:nth-child(2) img {
+//   width: 132px !important;
+//   height: 52px !important;
+// }
+
+
 #map-container.flipped  .gm-style-cc, #map-container.flipped .gmnoprint {
   transform: rotate(180deg) !important;    
   -webkit-transform: rotate(180deg) !important;
