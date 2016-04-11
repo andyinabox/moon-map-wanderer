@@ -59,3 +59,10 @@ body {
 .dg.main.hidden {
 	visibility: hidden;
 }
+
+#cursor {
+  z-index: 100000;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}

@@ -28,12 +28,17 @@ var _params = {
 	, movementDelay: 100
 	, flipped: false
 	, wandering: true
+  , flyingCursor: true
 }
 
 
 var _position = vec2.create();
 var _movementVec = vec2.create();
 var _scaledMovement = vec2.create();
+
+var _cursorImg = new Image();
+_cursorImg.src = "assets/cursor.png";
+_cursorImg.id = "cursor";
 
 // set initial movement vector
 vec2.set(_movementVec, 1, 0);
@@ -65,6 +70,7 @@ GoogleMaps.load(function(google) {
 
 	// add container
 	document.body.appendChild(_container);
+  document.body.appendChild(_cursorImg);
 
 	// create moon map type
   var moonMapType = new google.maps.ImageMapType({
@@ -139,9 +145,16 @@ GoogleMaps.load(function(google) {
     rotateVec2(_movementVec, _movementVec, deg2Rad(rotationDeg));
     vec2.scale(_scaledMovement, _movementVec, _params.maxMovementDist);
     vec2.add(_position, _position, _scaledMovement);
+
+    if(_params.flyingCursor) {
+      var rotation = (Math.PI/2) - Math.atan2(_movementVec[0], _movementVec[1]);
+      setCssTransform(_cursorImg, "rotate("+rotation+"rad)");
+    }
+
     // console.log('movement vec', vec2.len(_position), vec2.len(_scaledMovement), vec2.len(_movementVec));
     _map.setCenter(vec2ToLatLng(_position));
   }
+
 
   function rotateVec2(out, v, rad) {
     // console.log('createRotatedVector', v, rad);
@@ -175,6 +188,20 @@ GoogleMaps.load(function(google) {
     return new google.maps.LatLng(v[0], v[1]);
   }
 
+  function setCssTransform(el, val) {
+    var props = [
+      'webkitTransform'
+      , 'transform'
+    ]
+
+    props.forEach(function(p){
+      el.style[p] = val;
+    });
+
+    return el;
+  }
+
+
 	_gui = new dat.GUI();
 	_gui.add(_params, 'maxMovementDist', 0, 1);
   _gui.add(_params, 'maxMovementDeg', 0, 180);
@@ -190,11 +217,16 @@ GoogleMaps.load(function(google) {
 			start();
 		}
 	});
+  _gui.add(_params, 'flyingCursor').onChange(function(v) {
+    _cursorImg.style.display = v ? 'block' : 'none';
+  });
 
   _keyHandler.addListener(document, 'g', function() {
     console.log('g key!', _gui.domElement);
     _gui.domElement.classList.toggle('hidden');
   });
+
+
 
 	function start() {
     raf(function tick() {
