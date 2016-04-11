@@ -1,12 +1,12 @@
 {
   "name": "moon-map-wanderer",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "start": "budo index.js --live --open --css styles.css --title 'pointing at the moon'",
-    "build": "budo-demo index.js -c styles.css -i assets -t 'pointing at the moon'",
+    "build": "budo-demo index.js -c styles.css -i assets --minify --title 'pointing at the moon'",
     "deploy": "npm run build; gh-pages -d dist; npm run clean",
     "clean": "rm -r dist"
   },
