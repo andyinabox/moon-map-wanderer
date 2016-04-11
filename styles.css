@@ -25,6 +25,9 @@ body {
 	background: #000 !important;
 }
 
+.gm-style > div {
+  cursor: none !important;
+}
 
 /* google logo */
 #map-container.flipped .gm-style > div:nth-child(2){
