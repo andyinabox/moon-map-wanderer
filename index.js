@@ -30,7 +30,6 @@ var _params = {
 	, flipped: false
 	, wandering: true
   , flyingCursor: true
-  , enlargeCursor: false
 }
 
 
@@ -223,12 +222,12 @@ GoogleMaps.load(function(google) {
     _cursorImg.style.display = v ? 'block' : 'none';
   });
 
-  _gui.add(_params, 'enlargeCursor').onChange(function(v) {
-    _cursorImg.src = v ? 'assets/cursor2x.png' : 'assets/cursor.png';
-  });
+
+  _gui.domElement.classList.toggle('hidden');
+
 
   _keyHandler.addListener(document, 'g', function() {
-    console.log('g key!', _gui.domElement);
+    // console.log('g key!', _gui.domElement);
     _gui.domElement.classList.toggle('hidden');
   });
 
