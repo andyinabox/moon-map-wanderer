@@ -29,6 +29,7 @@ var _params = {
 	, flipped: false
 	, wandering: true
   , flyingCursor: true
+  , enlargeCursor: false
 }
 
 
@@ -219,6 +220,10 @@ GoogleMaps.load(function(google) {
 	});
   _gui.add(_params, 'flyingCursor').onChange(function(v) {
     _cursorImg.style.display = v ? 'block' : 'none';
+  });
+
+  _gui.add(_params, 'enlargeCursor').onChange(function(v) {
+    _cursorImg.src = v ? 'assets/cursor2x.png' : 'assets/cursor.png';
   });
 
   _keyHandler.addListener(document, 'g', function() {
