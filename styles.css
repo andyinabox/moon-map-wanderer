@@ -59,6 +59,23 @@ body {
   right: auto !important;
 }
 
+/* google logo */
+#map-container.hideLogos .gm-style > div:nth-child(2){
+  display: none !important;
+}
+
+// #map-container.flipped .gm-style > div:nth-child(2) > a > div,
+// #map-container.flipped .gm-style > div:nth-child(2) img {
+//   width: 132px !important;
+//   height: 52px !important;
+// }
+
+
+#map-container.hideLogos  .gm-style-cc, #map-container.hideLogos .gmnoprint {
+  display: none !important;
+}
+
+
 .dg.main.hidden {
 	visibility: hidden;
 }

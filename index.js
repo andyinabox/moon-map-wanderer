@@ -26,7 +26,8 @@ var _params = {
 	maxMovementDist : 0.01
   , maxMovementDeg: 10
 	, movementDelay: 100
-	, flipped: false
+	// , flipped: false
+  , hideLogos: false
 	, wandering: true
   , flyingCursor: true
 }
@@ -209,9 +210,12 @@ GoogleMaps.load(function(google) {
 		stop();
 		start();
 	});
-	_gui.add(_params, 'flipped').onChange(function(v) {
-		_container.classList.toggle('flipped');
-	});
+	// _gui.add(_params, 'flipped').onChange(function(v) {
+	// 	_container.classList.toggle('flipped');
+	// });
+  _gui.add(_params, 'hideLogos').onChange(function(v) {
+   _container.classList.toggle('hideLogos');
+  });  
 	_gui.add(_params, 'wandering').onChange(function(v) {
 		if(v) {
 			start();

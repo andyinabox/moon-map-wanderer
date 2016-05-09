@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "budo index.js --live --open --css styles.css --title 'pointing at the moon'",
+    "start": "budo index.js -H localhost --live --open --css styles.css --title 'pointing at the moon'",
     "build": "budo-demo index.js -c styles.css -i assets --minify --title 'pointing at the moon'",
     "deploy": "npm run build; gh-pages -d dist; npm run clean",
     "clean": "rm -r dist"
