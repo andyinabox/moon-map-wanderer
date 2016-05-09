@@ -27,9 +27,12 @@ var _params = {
 	maxMovementDist : 0.01
   , maxMovementDeg: 10
 	, movementDelay: 100
-	, flipped: false
+	// , flipped: false
+  , hideLogos: false
 	, wandering: true
   , flyingCursor: true
+  , bigCursor: false
+  , cursorXOffset: 0
 }
 
 
@@ -150,6 +153,7 @@ GoogleMaps.load(function(google) {
     if(_params.flyingCursor) {
       var rotation = (Math.PI/2) - Math.atan2(_movementVec[0], _movementVec[1]);
       setCssTransform(_cursorImg, "rotate("+rotation+"rad)");
+      _cursorImg.style['margin-left'] = _params.cursorXOffset + 'px';
     }
 
     // console.log('movement vec', vec2.len(_position), vec2.len(_scaledMovement), vec2.len(_movementVec));
@@ -210,9 +214,12 @@ GoogleMaps.load(function(google) {
 		stop();
 		start();
 	});
-	_gui.add(_params, 'flipped').onChange(function(v) {
-		_container.classList.toggle('flipped');
-	});
+	// _gui.add(_params, 'flipped').onChange(function(v) {
+	// 	_container.classList.toggle('flipped');
+	// });
+  _gui.add(_params, 'hideLogos').onChange(function(v) {
+   _container.classList.toggle('hideLogos');
+  });  
 	_gui.add(_params, 'wandering').onChange(function(v) {
 		if(v) {
 			start();
@@ -221,6 +228,10 @@ GoogleMaps.load(function(google) {
   _gui.add(_params, 'flyingCursor').onChange(function(v) {
     _cursorImg.style.display = v ? 'block' : 'none';
   });
+  _gui.add(_params, 'bigCursor').onChange(function(v) {
+    _cursorImg.src = 'assets/'  + (v ? 'cursor2x.png' : 'cursor.png');
+  });
+  _gui.add(_params, 'cursorXOffset', -200, 200);
 
 
   _gui.domElement.classList.toggle('hidden');
